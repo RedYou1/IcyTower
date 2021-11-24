@@ -53,7 +53,6 @@ func on_create_foo_button_pressed(a):
 
 func __ajoutPlancher():
 	var intern = get_node("interne")
-	randomize()
 	var diff = height/(nombre_plancher+1)
 	for i in range(1,nombre_plancher+1):
 		var w = rand_range(plancher_min_width,plancher_max_width)

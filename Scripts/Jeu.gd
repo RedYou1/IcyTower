@@ -50,6 +50,7 @@ func reset_rangs(none=true):
 		__ajoutRangs()
 
 func __ajoutRangs():
+	randomize()
 	var rangs = get_node("rangs")
 	var joueur = get_node("joueur")
 	var diff = -height + plancher_height + joueur.radius
