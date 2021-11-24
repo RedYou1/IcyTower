@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Scenes/floor.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Scenes/joueur.tscn" type="PackedScene" id=2]
+
+[node name="Jeu" type="Node"]
+
+[node name="floor" parent="." instance=ExtResource( 1 )]
+position = Vector2( 0, 100 )
+width = 200.0
+
+[node name="floor2" parent="." instance=ExtResource( 1 )]
+position = Vector2( 200, 80 )
+
+[node name="joueur" parent="." instance=ExtResource( 2 )]
+position = Vector2( 132.357, 40.4424 )
