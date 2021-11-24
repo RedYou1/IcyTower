@@ -17,6 +17,9 @@ export(bool) var reset setget reset_rangs
 var joueur
 var cam
 var checkout
+var lave
+var vitesseLave
+var labelLave
 
 func setPMin(pmw):
 	plancher_min_width = pmw
@@ -54,6 +57,8 @@ func __ajoutRangs():
 	var rangs = get_node("rangs")
 	var joueur = get_node("joueur")
 	var diff = -height + plancher_height + joueur.radius
+	
+	get_node("Lave").position.y = plancher_height + joueur.radius + height / 10
 	
 	joueur.position = Vector2(width/2,0)
 	
@@ -98,11 +103,21 @@ func _ready():
 		__ajoutRangs()
 		joueur = get_node("joueur")
 		cam = get_node("Camera2D")
+		lave = get_node("Lave")
 		checkout = - height - plancher_height - joueur.radius
-	
+		vitesseLave = height / 2000
+		labelLave = cam.get_node("Label")
+
+func _process(delta):
+	if not Engine.editor_hint:
+		lave.position.y -= vitesseLave
+		vitesseLave += vitesseLave / height
+		if joueur.position.y + joueur.radius > lave.position.y:
+			get_tree().quit()
 
 func setPosY():
 	cam.position.y = joueur.position.y
+	labelLave.text = "%.1f" % [floor(lave.position.y - (joueur.position.y + joueur.radius)) / height]
 	if joueur.position.y < checkout:
 		var rangs = get_node("rangs")
 		for child in rangs.get_children():
@@ -113,6 +128,7 @@ func setPosY():
 			else:
 				child.position.y += height
 		
+		lave.position.y += height
 		joueur.position.y += height
 
 
