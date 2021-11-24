@@ -16,3 +16,14 @@ width = 1000.0
 position = Vector2( 1000, 1000 )
 rotation = -1.5708
 width = 1000.0
+
+[node name="Label" type="Label" parent="."]
+margin_right = 200.0
+margin_bottom = 196.0
+rect_scale = Vector2( 5, 5 )
+text = "1"
+align = 1
+valign = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}

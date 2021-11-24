@@ -65,6 +65,7 @@ func __ajoutRangs():
 	t.nombre_plancher = nombre_plancher
 	t.plancher_height = plancher_height
 	t.position.y = diff
+	t.niveau = 1
 	rangs.add_child(t)
 	t.reset_interne()
 	
@@ -76,6 +77,7 @@ func __ajoutRangs():
 	t.nombre_plancher = nombre_plancher
 	t.plancher_height = plancher_height
 	t.position.y = diff - height
+	t.niveau = 2
 	rangs.add_child(t)
 	t.reset_interne()
 	
@@ -87,6 +89,7 @@ func __ajoutRangs():
 	t.nombre_plancher = nombre_plancher
 	t.plancher_height = plancher_height
 	t.position.y = diff - height*2
+	t.niveau = 3
 	rangs.add_child(t)
 	t.reset_interne()
 
@@ -105,6 +108,7 @@ func setPosY():
 		for child in rangs.get_children():
 			if child.position.y > 0:
 				child.position.y -= height*2
+				child.niveau += 3
 				child.reset_interne()
 			else:
 				child.position.y += height

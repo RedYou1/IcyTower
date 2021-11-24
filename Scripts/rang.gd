@@ -12,7 +12,13 @@ export(int) var nombre_plancher = 6 setget setPNb
 
 export(float) var plancher_height = 20 setget setPHeight
 
+export(int) var niveau = 1 setget setNiveau
+
 export(bool) var reset setget reset_interne
+
+func setNiveau(niv):
+	niveau = niv
+	reset_interne()
 
 func setPMin(pmw):
 	plancher_min_width = pmw
@@ -43,6 +49,10 @@ func setPHeight(h):
 	reset_interne()
 
 func reset_interne(a=true):
+	var label = get_node("Label")
+	label.rect_size = Vector2(width/5,(height-plancher_height)/5)
+	label.text = str(niveau)
+	
 	var intern = get_node("interne")
 	for child in intern.get_children():
 		intern.remove_child(child)
