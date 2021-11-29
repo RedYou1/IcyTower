@@ -1,5 +1,5 @@
 tool
-extends Node2D
+extends Node
 
 const plancher = preload("res://Scenes/plancher.tscn")
 
@@ -78,7 +78,10 @@ func __ajoutPlancher():
 	p.height = plancher_height
 	p.position = Vector2(0,height-plancher_height)
 	intern.add_child(p)
+	
+	var j = get_node("joueur")
+	j.position = Vector2(p.position.x+p.width/2,p.position.y-j.radius)
 
 func _ready():
-	if Engine.editor_hint:
+	if not Engine.editor_hint:
 		__ajoutPlancher()

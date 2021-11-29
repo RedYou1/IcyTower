@@ -2,36 +2,32 @@
 
 [ext_resource path="res://Scripts/Jeu.gd" type="Script" id=1]
 [ext_resource path="res://Scenes/joueur.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Scenes/Lave.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Scenes/plancher.tscn" type="PackedScene" id=3]
 
 [node name="Jeu" type="Node"]
 script = ExtResource( 1 )
 
-[node name="rangs" type="Node2D" parent="."]
+[node name="interne" type="Node2D" parent="."]
 
-[node name="joueur" parent="." instance=ExtResource( 2 )]
-position = Vector2( 500, 0 )
+[node name="GAUCHE" parent="." instance=ExtResource( 3 )]
+rotation = 1.5708
+width = 1000.0
 
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 500, 0 )
-current = true
-limit_left = 0
-limit_right = 1000
-editor_draw_limits = true
-editor_draw_drag_margin = true
+[node name="DROIT" parent="." instance=ExtResource( 3 )]
+position = Vector2( 1000, 1000 )
+rotation = -1.5708
+width = 1000.0
 
-[node name="Label" type="Label" parent="Camera2D"]
-anchor_left = 1.0
-anchor_right = 1.0
-margin_left = -500.0
-margin_top = -300.0
-margin_right = -300.0
-margin_bottom = -180.0
+[node name="Label" type="Label" parent="."]
+margin_right = 200.0
+margin_bottom = 196.0
 rect_scale = Vector2( 5, 5 )
-align = 2
+text = "1"
+align = 1
+valign = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="Lave" parent="." instance=ExtResource( 3 )]
-position = Vector2( 0, 140 )
+[node name="joueur" parent="." instance=ExtResource( 2 )]
+position = Vector2( 500, 960 )

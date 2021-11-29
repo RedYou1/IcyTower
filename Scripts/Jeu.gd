@@ -1,7 +1,8 @@
 tool
 extends Node
 
-const rang = preload("res://Scenes/rang.tscn")
+const plancher = preload("res://Scenes/plancher.tscn")
+const drapeau = preload("res://Scenes/Drapeau.tscn")
 
 export(float) var width = 1000 setget setWidth
 export(float) var height = 1000 setget setHeight
@@ -12,123 +13,81 @@ export(int) var nombre_plancher = 6 setget setPNb
 
 export(float) var plancher_height = 20 setget setPHeight
 
-export(bool) var reset setget reset_rangs
+export(int) var niveau = 1 setget setNiveau
 
-var joueur
-var cam
-var checkout
-var lave
-var vitesseLave
-var labelLave
+export(bool) var reset setget reset_interne
+
+func setNiveau(niv):
+	niveau = niv
+	reset_interne()
 
 func setPMin(pmw):
 	plancher_min_width = pmw
-	reset_rangs()
+	reset_interne()
 
 func setPMax(pmw):
 	plancher_max_width = pmw
-	reset_rangs()
+	reset_interne()
 
 func setPNb(nb):
 	nombre_plancher = nb
-	reset_rangs()
+	reset_interne()
 
 func setWidth(w):
 	width = w
-	reset_rangs()
+	get_node("DROIT").position.x = width
+	reset_interne()
 
 func setHeight(h):
 	height = h
-	reset_rangs()
+	get_node("DROIT").position.y = height
+	get_node("DROIT").width = height
+	get_node("GAUCHE").width = height
+	reset_interne()
 
 func setPHeight(h):
 	plancher_height = h
-	reset_rangs()
+	reset_interne()
 
-func reset_rangs(none=true):
-	if Engine.editor_hint:
-		var rangs = get_node("rangs")
-		for rang in rangs.get_children():
-			rangs.remove_child(rang)
-		__ajoutRangs()
+func reset_interne(a=true):
+	var label = get_node("Label")
+	label.rect_size = Vector2(width/5,(height-plancher_height)/5)
+	label.text = str(niveau)
+	
+	var intern = get_node("interne")
+	for child in intern.get_children():
+		intern.remove_child(child)
+	__ajoutPlancher()
 
-func __ajoutRangs():
-	randomize()
-	var rangs = get_node("rangs")
-	var joueur = get_node("joueur")
-	var diff = -height + plancher_height + joueur.radius
+func on_create_foo_button_pressed(a):
+	reset_interne()
+
+func __ajoutPlancher():
+	var intern = get_node("interne")
+	var diff = height/(nombre_plancher+1)
+	for i in range(1,nombre_plancher+1):
+		var w = rand_range(plancher_min_width,plancher_max_width)
+		var x = rand_range(0,width-w)
+		var p = plancher.instance()
+		p.width = w
+		p.height = plancher_height
+		p.position = Vector2(x,i*diff)
+		intern.add_child(p)
 	
-	get_node("Lave").position.y = plancher_height + joueur.radius + height / 10
+	var p = plancher.instance()
+	p.width = width
+	p.height = plancher_height
+	p.position = Vector2(0,height-plancher_height)
+	intern.add_child(p)
 	
-	joueur.position = Vector2(width/2,0)
+	var j = get_node("joueur")
+	j.position = Vector2(p.position.x+p.width/2,p.position.y-j.radius)
 	
-	var t = rang.instance()
-	t.width = width
-	t.height = height
-	t.plancher_min_width = plancher_min_width
-	t.plancher_max_width = plancher_max_width
-	t.nombre_plancher = nombre_plancher
-	t.plancher_height = plancher_height
-	t.position.y = diff
-	t.niveau = 1
-	rangs.add_child(t)
-	t.reset_interne()
-	
-	t = rang.instance()
-	t.width = width
-	t.height = height
-	t.plancher_min_width = plancher_min_width
-	t.plancher_max_width = plancher_max_width
-	t.nombre_plancher = nombre_plancher
-	t.plancher_height = plancher_height
-	t.position.y = diff - height
-	t.niveau = 2
-	rangs.add_child(t)
-	t.reset_interne()
-	
-	t = rang.instance()
-	t.width = width
-	t.height = height
-	t.plancher_min_width = plancher_min_width
-	t.plancher_max_width = plancher_max_width
-	t.nombre_plancher = nombre_plancher
-	t.plancher_height = plancher_height
-	t.position.y = diff - height*2
-	t.niveau = 3
-	rangs.add_child(t)
-	t.reset_interne()
+	p = intern.get_child(0)
+	var d = drapeau.instance()
+	d.position = Vector2(p.position.x+p.width/2,p.position.y-5)
+	intern.add_child(d)
 
 func _ready():
 	if not Engine.editor_hint:
-		__ajoutRangs()
-		joueur = get_node("joueur")
-		cam = get_node("Camera2D")
-		lave = get_node("Lave")
-		checkout = - height - plancher_height - joueur.radius
-		vitesseLave = height / 2000
-		labelLave = cam.get_node("Label")
-
-func _process(delta):
-	if not Engine.editor_hint:
-		lave.position.y -= vitesseLave
-		vitesseLave += vitesseLave / height
-		if joueur.position.y + joueur.radius > lave.position.y:
-			get_tree().quit()
-
-func setPosY():
-	cam.position.y = joueur.position.y
-	labelLave.text = "%.1f" % [floor(lave.position.y - (joueur.position.y + joueur.radius)) / height]
-	if joueur.position.y < checkout:
-		var rangs = get_node("rangs")
-		for child in rangs.get_children():
-			if child.position.y > 0:
-				child.position.y -= height*2
-				child.niveau += 3
-				child.reset_interne()
-			else:
-				child.position.y += height
-		
-		lave.position.y += height
-		joueur.position.y += height
-
-
+		__ajoutPlancher()

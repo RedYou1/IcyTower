@@ -36,12 +36,12 @@ func _physics_process(delta):
 		
 		if col != null:
 			vitesseY = 0
+			if col.collider.has_method("hit"):
+				col.collider.hit(self)
 		
 		
 		if vitesseY == 0 and Input.is_action_just_pressed("SAUT"):
 			vitesseY -= forceSaut
-		
-		jeu.setPosY()
 		
 		var move = 0
 		if Input.is_action_pressed("GAUCHE"):
@@ -50,7 +50,9 @@ func _physics_process(delta):
 			move += 1
 		
 		if move != 0:
-			move_and_collide(Vector2(move,0)*speed)
+			col = move_and_collide(Vector2(move,0)*speed)
+			if col != null and col.collider.has_method("hit"):
+				col.collider.hit(self)
 
 func _draw():
 	draw_circle(Vector2(),radius,Color.white)
