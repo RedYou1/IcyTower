@@ -4,8 +4,8 @@ extends KinematicBody2D
 
 export(float) var radius = 20 setget setR
 export(float) var gravity = 0.98
-export(float) var speed = 5
-export(float) var forceSaut = 30
+export(float) var speed = 7.5
+export(float) var forceSaut = 25
 
 var vitesseY = 0
 
