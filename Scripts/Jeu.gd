@@ -5,23 +5,33 @@ const plancher = preload("res://Scenes/plancher.tscn")
 const drapeau = preload("res://Scenes/Drapeau.tscn")
 const gomba = preload("res://Scenes/Gomba.tscn")
 
+const diff = 500/3
+
 export(float) var width_default = 1000 setget setWidth
 export(float) var height_default = 1000 setget setHeight
 export(float) var plancher_min_width_default = 150 setget setPMin
 export(float) var plancher_max_width_default = 300 setget setPMax
-export(int) var nombre_plancher_default = 5 setget setPNb
 export(float) var plancher_height_default = 20 setget setPHeight
+export(float) var chance_gomba = .5 setget setGomba
+export(float) var chance_casser = .5 setget setCasser
 
 var width = width_default
 var height = height_default
 var plancher_min_width = plancher_min_width_default
 var plancher_max_width = plancher_max_width_default
-var nombre_plancher = nombre_plancher_default
 var plancher_height = plancher_height_default
 
 export(int) var niveau = 1 setget setNiveau
 
 export(bool) var reset setget reset_interne
+
+func setCasser(g):
+	chance_casser = g
+	reset_interne()
+
+func setGomba(g):
+	chance_gomba = g
+	reset_interne()
 
 func setNiveau(niv):
 	niveau = niv
@@ -33,10 +43,6 @@ func setPMin(pmw):
 
 func setPMax(pmw):
 	plancher_max_width_default = pmw
-	reset_interne()
-
-func setPNb(nb):
-	nombre_plancher_default = nb
 	reset_interne()
 
 func setWidth(w):
@@ -61,7 +67,6 @@ func calc_niveau():
 	height = height_default + n*400
 	plancher_min_width = plancher_min_width_default - min(n,plancher_min_width_default-10)
 	plancher_max_width = plancher_max_width_default - min(n,plancher_min_width_default-plancher_min_width)
-	nombre_plancher = nombre_plancher_default + n * 2
 	plancher_height = plancher_height_default
 
 func reset_interne(a=true):
@@ -83,20 +88,21 @@ func __ajoutPlancher(calc=true):
 		calc_niveau()
 	
 	var gauche = get_node("GAUCHE")
-	gauche.width = height
+	gauche.position = Vector2(0,-diff)
+	gauche.width = height+diff
 	
 	var droit = get_node("DROIT")
 	droit.position = Vector2(width,height)
-	droit.width = height
+	droit.width = height+diff
 	
 	var gombaNb = floor(niveau/2)
+	var casserNb = floor(niveau/2)
 	
 	var intern = get_node("interne")
-	var diff = height/(nombre_plancher+1)
 	
 	var p = null
 	
-	for i in range(nombre_plancher,-1,-1):
+	for i in range(round(height/diff)-1,-1,-1):
 		var w = rand_range(plancher_min_width,plancher_max_width)
 		var x
 		if p != null:
@@ -107,16 +113,22 @@ func __ajoutPlancher(calc=true):
 		p.width = w
 		p.height = plancher_height
 		p.position = Vector2(x,i*diff)
-		intern.add_child(p)
 		
-		if i > 1 and gombaNb > 0 and rand_range(0,1) >= .5:
-			var g = gomba.instance()
-			g.minX = x
-			g.maxX = x+w
-			g.position = Vector2(x+rand_range(0,w),i*diff-32)
-			g.dir = round(rand_range(0,1))*2-1
-			intern.add_child(g)
-			gombaNb -= 1
+		if i > 1:
+			if gombaNb > 0 and rand_range(0,1) >= chance_gomba:
+				var g = gomba.instance()
+				g.minX = x
+				g.maxX = x+w
+				g.position = Vector2(x+rand_range(0,w),i*diff-32)
+				g.dir = round(rand_range(0,1))*2-1
+				intern.add_child(g)
+				gombaNb -= 1
+			
+			elif casserNb > 0 and rand_range(0,1) >= chance_casser:
+				p.casser = true
+				casserNb -= 1
+		
+		intern.add_child(p)
 	
 	p = intern.get_child(intern.get_child_count()-1)
 	var d = drapeau.instance()

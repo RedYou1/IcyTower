@@ -12,3 +12,14 @@ script = ExtResource( 1 )
 position = Vector2( 50, 10 )
 shape = SubResource( 1 )
 one_way_collision = true
+
+[node name="CasserTemps1" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="CasserTemps2" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[connection signal="timeout" from="CasserTemps1" to="." method="_on_CasserTemps1_timeout"]
+[connection signal="timeout" from="CasserTemps2" to="." method="_on_CasserTemps2_timeout"]

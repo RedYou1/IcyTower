@@ -21,13 +21,14 @@ __meta__ = {
 }
 
 [node name="GAUCHE" parent="." instance=ExtResource( 3 )]
+position = Vector2( 0, -166 )
 rotation = 1.5708
-width = 1000.0
+width = 1166.0
 
 [node name="DROIT" parent="." instance=ExtResource( 3 )]
 position = Vector2( 1000, 1000 )
 rotation = -1.5708
-width = 1000.0
+width = 1166.0
 
 [node name="joueur" parent="." instance=ExtResource( 2 )]
 position = Vector2( 500, 960 )

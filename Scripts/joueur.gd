@@ -40,7 +40,7 @@ func _physics_process(delta):
 				col.collider.hit(self)
 		
 		
-		if vitesseY == 0 and Input.is_action_just_pressed("SAUT"):
+		if vitesseY == 0 and Input.is_action_pressed("SAUT"):
 			vitesseY -= forceSaut
 		
 		var move = 0
