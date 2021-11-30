@@ -88,9 +88,6 @@ func calc_niveau():
 
 func reset_interne(a=true):
 	calc_niveau()
-	var label = get_node("Label")
-	label.rect_size = Vector2(width/5,(height-plancher_height)/5)
-	label.text = str(niveau)
 	
 	var intern = get_node("interne")
 	for child in intern.get_children():
@@ -104,6 +101,14 @@ func __ajoutPlancher(calc=true):
 	randomize()
 	if calc:
 		calc_niveau()
+	
+	var label = get_node("Label")
+	label.rect_size = Vector2(width/5,(height-plancher_height)/5)
+	label.text = str(niveau)
+	
+	var lave = get_node("Lave")
+	lave.position = Vector2(-height,height+lave.speed*100)
+	lave.width = height * 3
 	
 	var intern = get_node("interne")
 	
@@ -152,5 +157,13 @@ func __ajoutPlancher(calc=true):
 	var j = get_node("joueur")
 	j.position = Vector2(p.position.x+p.width/2,p.position.y-j.radius)
 
+var joueur
+
 func _ready():
 	__ajoutPlancher()
+	joueur = get_node("joueur")
+
+func setPosLave():
+	joueur.update()
+
+

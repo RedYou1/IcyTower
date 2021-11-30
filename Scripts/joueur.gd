@@ -6,7 +6,6 @@ export(float) var radius = 20 setget setR
 export(float) var gravity = 0.98
 export(float) var speed = 7.5
 export(float) var forceSaut = 25
-export(float) var ligne_de_la_mort = 100
 
 var vitesseY = 0
 
@@ -54,11 +53,6 @@ func _physics_process(delta):
 			col = move_and_collide(Vector2(move,0)*speed)
 			if col != null and col.collider.has_method("hit"):
 				col.collider.hit(self)
-		
-		
-		if global_position.y > ligne_de_la_mort:
-			jeu.niveau = 1
-			jeu.reset_interne()
 
 func _draw():
 	draw_circle(Vector2(),radius,Color.white)
