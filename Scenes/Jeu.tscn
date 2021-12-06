@@ -25,5 +25,5 @@ __meta__ = {
 position = Vector2( 500, 1280 )
 
 [node name="Lave" parent="." instance=ExtResource( 3 )]
-position = Vector2( -1320, 1820 )
-width = 3960.0
+position = Vector2( -1320, 1620 )
+longueur = 3960.0

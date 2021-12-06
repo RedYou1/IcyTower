@@ -1,21 +1,21 @@
 tool
 extends Node2D
 
-export(float) var width = 1000 setget setWidth
+export(float) var longueur = 1000 setget setLongueur
 
-export(float) var height = 1000 setget setHeight
+export(float) var hauteur = 1000 setget setHauteur
 
-export(float) var speed = 5
+export(float) var vitesse = 3
 
 var parent
 var joueur
 
-func setWidth(w):
-	width = w
+func setLongueur(l):
+	longueur = l
 	update()
 
-func setHeight(h):
-	height = h
+func setHauteur(h):
+	hauteur = h
 	update()
 
 func _ready():
@@ -25,12 +25,12 @@ func _ready():
 
 func _process(delta):
 	if not Engine.editor_hint:
-		position.y -= speed
-		if joueur.position.y + joueur.radius > position.y:
+		position.y -= vitesse
+		if joueur.position.y + joueur.rayon > position.y:
 			parent.niveau = 1
 			parent.reset_interne()
 		else:
-			parent.setPosLave()
+			joueur.update()
 
 func _draw():
-	draw_rect(Rect2(0,0,width,height),Color.orange)
+	draw_rect(Rect2(0,0,longueur,hauteur),Color.orange)

@@ -2,20 +2,20 @@ tool
 extends KinematicBody2D
 
 
-export(float) var radius = 20 setget setR
-export(float) var gravity = 0.98
-export(float) var speed = 7.5
+export(float) var rayon = 20 setget changerRayon
+export(float) var gravite = 0.98
+export(float) var vitesse = 7.5
 export(float) var forceSaut = 25
 
 var vitesseY = 0
 
 var jeu
 
-func setR(_radius):
-	radius = _radius
+func changerRayon(_rayon):
+	rayon = _rayon
 	var col = get_node("CollisionShape2D")
 	var shape = CircleShape2D.new()
-	shape.radius = radius
+	shape.rayon = rayon
 	col.shape = shape
 	col.position = Vector2()
 	update()
@@ -24,35 +24,35 @@ func _ready():
 	jeu = get_parent()
 	var col = get_node("CollisionShape2D")
 	var shape = CircleShape2D.new()
-	shape.radius = radius
+	shape.radius = rayon
 	col.shape = shape
 	col.position = Vector2()
 
 func _physics_process(delta):
 	if not Engine.editor_hint:
-		vitesseY += gravity
+		vitesseY += gravite
 		
-		var col = move_and_collide(Vector2(0,vitesseY))
+		var qui = move_and_collide(Vector2(0,vitesseY))
 		
-		if col != null:
+		if qui != null:
 			vitesseY = 0
-			if col.collider.has_method("hit"):
-				col.collider.hit(self)
+			if qui.collider.has_method("toucher"):
+				qui.collider.toucher(self)
 		
 		
 		if vitesseY == 0 and Input.is_action_pressed("SAUT"):
 			vitesseY -= forceSaut
 		
-		var move = 0
+		var deplacement = 0
 		if Input.is_action_pressed("GAUCHE"):
-			move -= 1
+			deplacement -= 1
 		if Input.is_action_pressed("DROIT"):
-			move += 1
+			deplacement += 1
 		
-		if move != 0:
-			col = move_and_collide(Vector2(move,0)*speed)
-			if col != null and col.collider.has_method("hit"):
-				col.collider.hit(self)
+		if deplacement != 0:
+			qui = move_and_collide(Vector2(deplacement,0)*vitesse)
+			if qui != null and qui.collider.has_method("toucher"):
+				qui.collider.toucher(self)
 
 func _draw():
-	draw_circle(Vector2(),radius,Color.white)
+	draw_circle(Vector2(),rayon,Color.white)

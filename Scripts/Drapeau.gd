@@ -1,6 +1,6 @@
 extends StaticBody2D
 
-func hit(qui):
+func toucher(qui):
 	if qui.name == "joueur":
 		var jeu = get_parent().get_parent()
 		jeu.niveau += 1
