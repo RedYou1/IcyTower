@@ -8,7 +8,7 @@ enum directions {
 
 export(float) var minX = 0
 export(float) var maxX = 0
-export(float) var vitesse = 6
+export(float) var vitesse = 5
 export(directions) var dir = directions.DROIT
 
 func _process(delta):
